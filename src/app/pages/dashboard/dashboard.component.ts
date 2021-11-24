@@ -1,49 +1,45 @@
 import { Component, OnInit } from '@angular/core';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
-  styleUrls: ['./dashboard.component.scss']
+  styleUrls: ['./dashboard.component.scss'],
 })
 export class DashboardComponent implements OnInit {
-  public classNames:string = 'btn btn-primary';
-  public isRed:boolean = false;
-  public studenti:any[]=[
-    {
-      nume:'Ionel',
-      ani:30
-    },
-    {
-      nume:'Irina',
-      ani:20
-    },
-    {
-      nume:'Ana',
-      ani:24
-    }
-  ]
-  constructor() { }
+  public classNames: string = 'btn btn-primary';
+  public isRed: boolean = false;
+  public studenti: any[] = [];
+  constructor(private authService: AuthService) {}
 
   ngOnInit(): void {
+    this.getUsers();
   }
 
-  toggleIsRed(){
-    this.isRed= !this.isRed;
+  getUsers() {
+    this.authService.getAllUsers().subscribe((response: any) => {
+      this.studenti = response.allUsers;
+    });
   }
 
-  addStudent(){
+  toggleIsRed() {
+    this.isRed = !this.isRed;
+  }
+
+  addStudent() {
     this.studenti.push({
-      nume:'George',
-      ani:50
-    })
+      nume: 'George',
+      ani: 50,
+    });
   }
 
-  stergeStudent(index:number){
-    this.studenti.splice(index,1);
+  stergeStudent(index: number) {
+    this.studenti.splice(index, 1);
   }
 
-  stergeStudentInFunctieDeNume(numeStudent:string){
-    this.studenti = this.studenti.filter((student)=>{return student.nume!==numeStudent})
+  stergeStudentInFunctieDeNume(numeStudent: string) {
+    this.studenti = this.studenti.filter((student) => {
+      return student.nume !== numeStudent;
+    });
   }
-
 }
